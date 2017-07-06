@@ -37,7 +37,7 @@ Server::Server(const std::string &host, unsigned short port, const std::string &
 
 Server::~Server()
 {
-    if (masterSocket == -1)
+    if (masterSocket != -1)
     {
         try
         {
