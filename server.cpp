@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <ctime>
 #include <fstream>
+#include <stdexcept>
 
 #include "server.h"
 
