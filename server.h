@@ -8,7 +8,7 @@ class Server
 {
 public:
     Server(const std::string &host, unsigned short port, const std::string &documentRoot);
-    ~Server();
+    virtual ~Server();
     void Start();
     void Stop();
     void ProcessRequest(int socket);
