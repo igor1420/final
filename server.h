@@ -13,10 +13,11 @@ public:
     void Stop();
     void ProcessRequest(int socket);
 private:
-    void Log(int priority, const std::string &message);
-    int SetNonBlock(int fd);
-    std::string GetResponse(const std::string &method, const std::string &path);
-    std::vector<std::string> Split(const std::string &input, const std::string &delim);
+    void Log(int priority, const std::string &message)const;
+    int SetNonBlock(int fd)const;
+    std::string GetResponse(const std::string &method, const std::string &path)const;
+    std::vector<std::string> Split(const std::string &input, const std::string &delim)const;
+    std::string GetTime()const;
 
     std::string host;
     unsigned short port;

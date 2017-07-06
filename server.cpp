@@ -8,9 +8,9 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <time.h>
 #include <syslog.h>
 #include <iostream>
-#include <vector>
 #include <sstream>
 #include <iomanip>
 #include <ctime>
@@ -160,13 +160,13 @@ void Server::Stop()
 {
 }
 
-void Server::Log(int priority, const std::string &message)
+void Server::Log(int priority, const std::string &message)const
 {
     syslog(priority, "%s", message.c_str());
     std::cerr << message << std::endl;
 }
 
-int Server::SetNonBlock(int fd)
+int Server::SetNonBlock(int fd)const
 {
     int flags;
 #if defined(O_NONBLOCK)
@@ -179,7 +179,7 @@ int Server::SetNonBlock(int fd)
 #endif
 }
 
-std::string Server::GetResponse(const std::string &method, const std::string &path)
+std::string Server::GetResponse(const std::string &method, const std::string &path)const
 {
     const std::string HttpVersion = "HTTP/1.0";
     std::string statusCode;
@@ -216,9 +216,7 @@ std::string Server::GetResponse(const std::string &method, const std::string &pa
     std::time_t t = std::time(nullptr);
     std::tm tm = *std::gmtime(&t);
     entityHeader += "\nDate: ";
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%c %Z");
-    entityHeader += ss.str();
+    entityHeader += GetTime();
     return statusLine + "\n" + responseHeader + "\n" + entityHeader + "\n\n" + responseBody;
 }
 
@@ -252,7 +250,7 @@ void Server::ProcessRequest(int socket)
     close(socket);
 }
 
-std::vector<std::string> Server::Split(const std::string &input, const std::string &delim)
+std::vector<std::string> Server::Split(const std::string &input, const std::string &delim)const
 {
     std::vector<std::string> result;
     for (std::string::size_type pos = 0;;)
@@ -270,4 +268,15 @@ std::vector<std::string> Server::Split(const std::string &input, const std::stri
         }
     }
     return result;
+}
+
+std::string Server::GetTime()const
+{
+    time_t rawtime;
+    char buffer[80];
+    memset(buffer, 0, sizeof(buffer));
+    time(&rawtime);
+    struct tm *timeinfo = gmtime(&rawtime);
+    strftime(buffer, sizeof(buffer), "%c", timeinfo);
+    return buffer;
 }

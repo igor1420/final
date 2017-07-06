@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include <syslog.h>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <sstream>
 #include <iomanip>
 #include <ctime>
